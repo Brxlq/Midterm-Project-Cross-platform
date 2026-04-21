@@ -28,6 +28,7 @@ flutter:
 
   assets:
     - assets/
+    - assets/data/
     - assets/categories/
     - assets/restaurants/
     - assets/profile_pics/

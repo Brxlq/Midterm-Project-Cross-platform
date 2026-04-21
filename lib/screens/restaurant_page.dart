@@ -221,8 +221,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
                   vehicle: widget.restaurant,
                   scrollController: scrollController,
                   showAppBar: false,
-                  onSubmit: (order) {
-                    widget.ordersManager.addOrder(order);
+                  onSubmit: (order) async {
+                    await widget.ordersManager.addOrder(order);
+                    if (!mounted || !sheetContext.mounted) return;
                     Navigator.of(sheetContext).pop();
                     this.context.go('/${EchelonTab.trips.value}');
                   },

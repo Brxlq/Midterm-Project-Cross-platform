@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'cart_manager.dart';
 
@@ -117,23 +120,119 @@ class Order {
         '$rentalLengthLabel, ${getFormattedSegment()}'
         '${discountCode == null ? '' : '\nPromo: $discountCode'}';
   }
+
+  factory Order.fromJson(Map<String, dynamic> json) {
+    final selectedSegment = (json['selectedSegment'] as List<dynamic>? ?? [])
+        .whereType<num>()
+        .map((value) => value.toInt())
+        .toSet();
+    final selectedTimeJson = json['selectedTime'] as Map<String, dynamic>?;
+    final selectedTime = selectedTimeJson == null
+        ? null
+        : TimeOfDay(
+            hour: (selectedTimeJson['hour'] as int?) ?? 0,
+            minute: (selectedTimeJson['minute'] as int?) ?? 0,
+          );
+    final selectedDateRaw = json['selectedDate'] as String?;
+    final selectedDate = selectedDateRaw == null
+        ? null
+        : DateTime.tryParse(selectedDateRaw);
+    final items = (json['items'] as List<dynamic>? ?? [])
+        .whereType<Map>()
+        .map((item) => CartItem.fromJson(Map<String, dynamic>.from(item)))
+        .toList();
+    final rentalUnitRaw = json['rentalUnit'] as String?;
+    final rentalUnit = rentalUnitRaw == RentalUnit.days.name
+        ? RentalUnit.days
+        : RentalUnit.hours;
+
+    return Order(
+      selectedSegment: selectedSegment.isEmpty ? {0} : selectedSegment,
+      selectedTime: selectedTime,
+      selectedDate: selectedDate,
+      name: json['name'] as String? ?? '',
+      items: items,
+      vehicleName: json['vehicleName'] as String? ?? '',
+      vehicleImageUrl: json['vehicleImageUrl'] as String? ?? '',
+      vehicleClass: json['vehicleClass'] as String? ?? '',
+      baseRate: (json['baseRate'] as num?)?.toDouble() ?? 0,
+      rentalUnit: rentalUnit,
+      rentalLength: json['rentalLength'] as int? ?? 1,
+      discountAmount: (json['discountAmount'] as num?)?.toDouble() ?? 0,
+      discountCode: json['discountCode'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'selectedSegment': selectedSegment.toList(),
+        'selectedTime': selectedTime == null
+            ? null
+            : {
+                'hour': selectedTime!.hour,
+                'minute': selectedTime!.minute,
+              },
+        'selectedDate': selectedDate?.toIso8601String(),
+        'name': name,
+        'items': items.map((item) => item.toJson()).toList(),
+        'vehicleName': vehicleName,
+        'vehicleImageUrl': vehicleImageUrl,
+        'vehicleClass': vehicleClass,
+        'baseRate': baseRate,
+        'rentalUnit': rentalUnit.name,
+        'rentalLength': rentalLength,
+        'discountAmount': discountAmount,
+        'discountCode': discountCode,
+      };
 }
 
 class OrderManager {
+  OrderManager({List<Order>? initialOrders}) {
+    if (initialOrders != null) {
+      _orders.addAll(initialOrders);
+    }
+  }
+
+  static const _ordersKey = 'echelon_orders';
   final List<Order> _orders = [];
+
+  static Future<List<Order>> loadSavedOrders() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_ordersKey);
+      if (raw == null || raw.isEmpty) {
+        return [];
+      }
+      final decoded = jsonDecode(raw) as List<dynamic>;
+      return decoded
+          .whereType<Map>()
+          .map((entry) => Order.fromJson(Map<String, dynamic>.from(entry)))
+          .toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<void> _persistOrders() async {
+    final prefs = await SharedPreferences.getInstance();
+    final encoded = jsonEncode(_orders.map((order) => order.toJson()).toList());
+    await prefs.setString(_ordersKey, encoded);
+  }
 
   List<Order> get orders => _orders;
 
-  void addOrder(Order order) {
+  Future<void> addOrder(Order order) async {
     _orders.add(order);
+    await _persistOrders();
   }
 
-  void insertOrder(int index, Order order) {
+  Future<void> insertOrder(int index, Order order) async {
     _orders.insert(index.clamp(0, _orders.length), order);
+    await _persistOrders();
   }
 
-  void removeOrder(Order order) {
+  Future<void> removeOrder(Order order) async {
     _orders.remove(order);
+    await _persistOrders();
   }
 
   int get totalOrders => _orders.length;

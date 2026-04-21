@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "profileImageUrl": "assets/profile_pics/person_cesare.jpeg",
+    "comment": "Took the Tesla Model 3 across downtown and still had 62% battery left after meetings.",
+    "timestamp": "10"
+  },
+  {
+    "id": "2",
+    "profileImageUrl": "assets/profile_pics/person_stef.jpeg",
+    "comment": "Weekend mountain run in the Honda Accord felt smooth even in the rain.",
+    "timestamp": "80"
+  },
+  {
+    "id": "3",
+    "profileImageUrl": "assets/profile_pics/person_crispy.png",
+    "comment": "Airport pickup with the Toyota Corolla was cheaper than rideshare both ways.",
+    "timestamp": "20"
+  },
+  {
+    "id": "4",
+    "profileImageUrl": "assets/profile_pics/person_joe.jpeg",
+    "comment": "Booked an extra driver pass and swapped at the coast without any friction.",
+    "timestamp": "30"
+  }
+]

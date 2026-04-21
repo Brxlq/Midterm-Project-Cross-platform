@@ -12,6 +12,22 @@ class Item {
   final String description;
   final double price;
   final String imageUrl;
+
+  factory Item.fromJson(Map<String, dynamic> json) {
+    return Item(
+      name: json['name'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0,
+      imageUrl: json['imageUrl'] as String? ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'description': description,
+        'price': price,
+        'imageUrl': imageUrl,
+      };
 }
 
 class Restaurant {
@@ -42,6 +58,41 @@ class Restaurant {
   double hourlyRate;
 
   double get dailyRate => hourlyRate * 8;
+
+  factory Restaurant.fromJson(Map<String, dynamic> json) {
+    final items = (json['items'] as List<dynamic>? ?? [])
+        .whereType<Map>()
+        .map((entry) => Item.fromJson(Map<String, dynamic>.from(entry)))
+        .toList();
+
+    return Restaurant(
+      json['id'] as String? ?? '',
+      json['name'] as String? ?? '',
+      json['address'] as String? ?? '',
+      json['attributes'] as String? ?? '',
+      json['imageUrl'] as String? ?? '',
+      json['imageCredits'] as String? ?? '',
+      (json['distance'] as num?)?.toDouble() ?? 0,
+      (json['rating'] as num?)?.toDouble() ?? 0,
+      items,
+      vehicleClass: json['vehicleClass'] as String? ?? '',
+      hourlyRate: (json['hourlyRate'] as num?)?.toDouble() ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'address': address,
+        'attributes': attributes,
+        'imageUrl': imageUrl,
+        'imageCredits': imageCredits,
+        'distance': distance,
+        'rating': rating,
+        'items': items.map((item) => item.toJson()).toList(),
+        'vehicleClass': vehicleClass,
+        'hourlyRate': hourlyRate,
+      };
 
   String getRatingAndDistance() {
     return 'Rated ${rating.toStringAsFixed(1)} | '

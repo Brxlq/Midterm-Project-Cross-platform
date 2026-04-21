@@ -16,7 +16,7 @@ class CheckoutPage extends StatefulWidget {
 
   final CartManager cartManager;
   final Function() didUpdate;
-  final Function(Order) onSubmit;
+  final Future<void> Function(Order) onSubmit;
   final Restaurant vehicle;
   final ScrollController? scrollController;
   final bool showAppBar;
@@ -486,7 +486,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           ? () {
               _showInfo('Choose both pickup date and pickup time first.');
             }
-          : () {
+          : () async {
               final order = Order(
                 selectedSegment: selectedSegment,
                 selectedTime: selectedTime,
@@ -504,7 +504,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               );
 
               widget.cartManager.resetCart();
-              widget.onSubmit(order);
+              await widget.onSubmit(order);
             },
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.all(16),

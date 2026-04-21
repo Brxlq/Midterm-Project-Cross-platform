@@ -1,0 +1,210 @@
+[
+  {
+    "id": "0",
+    "name": "Toyota Corolla",
+    "address": "Khan Shatyr Hub, Astana",
+    "attributes": "Economy, fuel efficient, Apple CarPlay",
+    "imageUrl": "https://images.unsplash.com/photo-1623869675781-80aa31012a5a?q=80&w=1154&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "imageCredits": "https://images.unsplash.com/photo-1623869675781-80aa31012a5a",
+    "distance": 0.8,
+    "rating": 4.7,
+    "vehicleClass": "Economy",
+    "hourlyRate": 14,
+    "items": [
+      {
+        "name": "Phone mount and cable pack",
+        "description": "Magnetic dash mount with Lightning and USB-C charging cables.",
+        "price": 8,
+        "imageUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80"
+      },
+      {
+        "name": "Street parking protection",
+        "description": "Reduced excess for mirrors, scrapes, and wheel damage.",
+        "price": 14,
+        "imageUrl": "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80"
+      }
+    ]
+  },
+  {
+    "id": "1",
+    "name": "Hyundai Elantra",
+    "address": "Nurzhol Boulevard Hub, Astana",
+    "attributes": "Economy, efficient commuter, easy parking",
+    "imageUrl": "https://images.unsplash.com/photo-1724217557820-8630c9844cfb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "imageCredits": "https://images.unsplash.com/photo-1724217557820-8630c9844cfb",
+    "distance": 1.3,
+    "rating": 4.6,
+    "vehicleClass": "Economy",
+    "hourlyRate": 13,
+    "items": [
+      {
+        "name": "Phone mount and cable pack",
+        "description": "Magnetic dash mount with Lightning and USB-C charging cables.",
+        "price": 8,
+        "imageUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80"
+      },
+      {
+        "name": "Street parking protection",
+        "description": "Reduced excess for mirrors, scrapes, and wheel damage.",
+        "price": 14,
+        "imageUrl": "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80"
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "name": "Honda Accord",
+    "address": "Baiterek Tower Hub, Astana",
+    "attributes": "Comfort, roomy cabin, adaptive cruise",
+    "imageUrl": "https://images.unsplash.com/photo-1634737581963-5a22ba471961?q=80&w=1243&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "imageCredits": "https://images.unsplash.com/photo-1634737581963-5a22ba471961",
+    "distance": 1.1,
+    "rating": 4.8,
+    "vehicleClass": "Comfort",
+    "hourlyRate": 19,
+    "items": [
+      {
+        "name": "Extra driver access",
+        "description": "Add a second approved driver for city handoffs or longer day trips.",
+        "price": 18,
+        "imageUrl": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80"
+      },
+      {
+        "name": "Unlimited local miles",
+        "description": "Upgrade your booking with unlimited mileage in the local zone.",
+        "price": 20,
+        "imageUrl": "https://images.unsplash.com/photo-1485291571150-772bcfc10da5?auto=format&fit=crop&w=900&q=80"
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "name": "Toyota Camry",
+    "address": "EXPO Business Hub, Astana",
+    "attributes": "Comfort, quiet ride, ideal for longer city drives",
+    "imageUrl": "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "imageCredits": "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb",
+    "distance": 1.7,
+    "rating": 4.7,
+    "vehicleClass": "Comfort",
+    "hourlyRate": 18,
+    "items": [
+      {
+        "name": "Extra driver access",
+        "description": "Add a second approved driver for city handoffs or longer day trips.",
+        "price": 18,
+        "imageUrl": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80"
+      },
+      {
+        "name": "Unlimited local miles",
+        "description": "Upgrade your booking with unlimited mileage in the local zone.",
+        "price": 20,
+        "imageUrl": "https://images.unsplash.com/photo-1485291571150-772bcfc10da5?auto=format&fit=crop&w=900&q=80"
+      }
+    ]
+  },
+  {
+    "id": "10",
+    "name": "BMW 5 Series",
+    "address": "Nazarbayev Center Hub, Astana",
+    "attributes": "Premium, leather cabin, executive ride",
+    "imageUrl": "https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?auto=format&fit=crop&w=1400&q=80",
+    "imageCredits": "https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9",
+    "distance": 2.1,
+    "rating": 4.9,
+    "vehicleClass": "Premium",
+    "hourlyRate": 34,
+    "items": [
+      {
+        "name": "Concierge detail",
+        "description": "Fresh wash, cabin fragrance reset, and premium curb presentation.",
+        "price": 26,
+        "imageUrl": "https://images.unsplash.com/photo-1607861716497-e65ab29fc7ac?auto=format&fit=crop&w=900&q=80"
+      },
+      {
+        "name": "Valet return",
+        "description": "End your trip in the core service zone without returning to the hub.",
+        "price": 30,
+        "imageUrl": "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80"
+      }
+    ]
+  },
+  {
+    "id": "11",
+    "name": "Mercedes-Benz E-Class",
+    "address": "Ak Orda District Hub, Astana",
+    "attributes": "Premium, smooth suspension, quiet cabin",
+    "imageUrl": "https://images.unsplash.com/photo-1700183422484-77641f4d2f3b?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "imageCredits": "https://images.unsplash.com/photo-1700183422484-77641f4d2f3b",
+    "distance": 1.9,
+    "rating": 4.9,
+    "vehicleClass": "Premium",
+    "hourlyRate": 38,
+    "items": [
+      {
+        "name": "Concierge detail",
+        "description": "Fresh wash, cabin fragrance reset, and premium curb presentation.",
+        "price": 26,
+        "imageUrl": "https://images.unsplash.com/photo-1607861716497-e65ab29fc7ac?auto=format&fit=crop&w=900&q=80"
+      },
+      {
+        "name": "Valet return",
+        "description": "End your trip in the core service zone without returning to the hub.",
+        "price": 30,
+        "imageUrl": "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80"
+      }
+    ]
+  },
+  {
+    "id": "15",
+    "name": "Tesla Model 3",
+    "address": "Green Quarter Hub, Astana",
+    "attributes": "Electric, autopilot, fast charging",
+    "imageUrl": "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "imageCredits": "https://images.unsplash.com/photo-1560958089-b8a1929cea89",
+    "distance": 0.5,
+    "rating": 4.8,
+    "vehicleClass": "Electric",
+    "hourlyRate": 27,
+    "items": [
+      {
+        "name": "Supercharger credit",
+        "description": "Prepaid fast-charging credit for quick top-ups during the trip.",
+        "price": 12,
+        "imageUrl": "https://images.unsplash.com/photo-1593941707882-a5bac6861d75?auto=format&fit=crop&w=900&q=80"
+      },
+      {
+        "name": "Airport lane pass",
+        "description": "Priority pickup and drop-off access for major terminals.",
+        "price": 24,
+        "imageUrl": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80"
+      }
+    ]
+  },
+  {
+    "id": "16",
+    "name": "Polestar 2",
+    "address": "Astana IT University Hub, Astana",
+    "attributes": "Electric, Scandinavian interior, one-pedal drive",
+    "imageUrl": "https://images.unsplash.com/photo-1655287790092-c8e16d0ce24c?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "imageCredits": "https://images.unsplash.com/photo-1655287790092-c8e16d0ce24c",
+    "distance": 0.9,
+    "rating": 4.8,
+    "vehicleClass": "Electric",
+    "hourlyRate": 29,
+    "items": [
+      {
+        "name": "Supercharger credit",
+        "description": "Prepaid fast-charging credit for quick top-ups during the trip.",
+        "price": 12,
+        "imageUrl": "https://images.unsplash.com/photo-1593941707882-a5bac6861d75?auto=format&fit=crop&w=900&q=80"
+      },
+      {
+        "name": "Airport lane pass",
+        "description": "Priority pickup and drop-off access for major terminals.",
+        "price": 24,
+        "imageUrl": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80"
+      }
+    ]
+  }
+]

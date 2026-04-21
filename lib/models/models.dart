@@ -1,4 +1,5 @@
 export 'auth.dart';
+export 'app_cache.dart';
 export 'cart_manager.dart';
 export 'food_category.dart';
 export 'order_manager.dart';

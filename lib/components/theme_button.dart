@@ -6,7 +6,7 @@ class ThemeButton extends StatelessWidget {
     required this.changeThemeMode,
   }) : super(key: key);
 
-  final Function changeThemeMode;
+  final Future<void> Function(bool useLightMode) changeThemeMode;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class ThemeButton extends StatelessWidget {
       icon: isBright
           ? const Icon(Icons.dark_mode_outlined)
           : const Icon(Icons.light_mode_outlined),
-      onPressed: () => changeThemeMode(!isBright),
+      onPressed: () async => changeThemeMode(!isBright),
     );
   }
 }

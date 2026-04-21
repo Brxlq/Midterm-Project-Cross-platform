@@ -15,6 +15,7 @@ class Home extends StatefulWidget {
     required this.changeTheme,
     required this.changeColor,
     required this.colorSelected,
+    required this.onTabSelected,
     required this.tab,
   });
 
@@ -23,8 +24,9 @@ class Home extends StatefulWidget {
   final CartManager cartManager;
   final OrderManager ordersManager;
   final ColorSelection colorSelected;
-  final void Function(bool useLightMode) changeTheme;
-  final void Function(int value) changeColor;
+  final Future<void> Function(bool useLightMode) changeTheme;
+  final Future<void> Function(int value) changeColor;
+  final Future<void> Function(int value) onTabSelected;
 
   @override
   State<Home> createState() => _HomeState();
@@ -109,7 +111,11 @@ class _HomeState extends State<Home> {
       body: IndexedStack(index: widget.tab, children: pages),
       bottomNavigationBar: NavigationBar(
         selectedIndex: widget.tab,
-        onDestinationSelected: (index) => context.go('/$index'),
+        onDestinationSelected: (index) async {
+          await widget.onTabSelected(index);
+          if (!context.mounted) return;
+          context.go('/$index');
+        },
         destinations: appBarDestinations,
       ),
     );

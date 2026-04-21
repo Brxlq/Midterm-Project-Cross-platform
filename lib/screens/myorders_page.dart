@@ -12,15 +12,15 @@ class MyOrdersPage extends StatefulWidget {
 }
 
 class _MyOrdersPageState extends State<MyOrdersPage> {
-  void _cancelOrder(Order order, {int? index}) {
+  Future<void> _cancelOrder(Order order, {int? index}) async {
     final removedIndex = index ?? widget.orderManager.orders.indexOf(order);
     if (removedIndex < 0) {
       return;
     }
 
-    setState(() {
-      widget.orderManager.removeOrder(order);
-    });
+    await widget.orderManager.removeOrder(order);
+    if (!mounted) return;
+    setState(() {});
 
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -29,10 +29,10 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           content: Text('${order.vehicleName} reservation cancelled'),
           action: SnackBarAction(
             label: 'Undo',
-            onPressed: () {
-              setState(() {
-                widget.orderManager.insertOrder(removedIndex, order);
-              });
+            onPressed: () async {
+              await widget.orderManager.insertOrder(removedIndex, order);
+              if (!mounted) return;
+              setState(() {});
             },
           ),
         ),
@@ -72,10 +72,14 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                   direction: DismissDirection.endToStart,
                   background: const SizedBox.shrink(),
                   secondaryBackground: const _DismissReservationBackground(),
-                  onDismissed: (_) => _cancelOrder(order, index: index),
+                  onDismissed: (_) {
+                    _cancelOrder(order, index: index);
+                  },
                   child: OrderTile(
                     order: order,
-                    onCancel: () => _cancelOrder(order, index: index),
+                    onCancel: () {
+                      _cancelOrder(order, index: index);
+                    },
                   ),
                 );
               },

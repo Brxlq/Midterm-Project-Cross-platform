@@ -9,7 +9,7 @@ class ColorButton extends StatelessWidget {
     required this.colorSelected,
   });
 
-  final void Function(int) changeColor;
+  final Future<void> Function(int) changeColor;
   final ColorSelection colorSelected;
 
   @override
@@ -49,7 +49,7 @@ class ColorButton extends StatelessWidget {
           },
         );
       },
-      onSelected: changeColor,
+      onSelected: (value) async => changeColor(value),
     );
   }
 }

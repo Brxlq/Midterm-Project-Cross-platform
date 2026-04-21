@@ -8,8 +8,32 @@ import '../screens/screens.dart';
 import 'constants.dart';
 import 'home.dart';
 
-void main() {
-  runApp(const EchelonApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final appCache = AppCache();
+  final cachedThemeMode = await appCache.getThemeMode();
+  final cachedColorSelection = await appCache.getColorSelection();
+  final cachedTab = await appCache.getLastTab();
+  final savedOrders = await OrderManager.loadSavedOrders();
+
+  final initialThemeMode = cachedThemeMode == 'dark'
+      ? ThemeMode.dark
+      : ThemeMode.light;
+  final safeColorIndex = cachedColorSelection.clamp(
+    0,
+    ColorSelection.values.length - 1,
+  );
+  final safeTab = cachedTab.clamp(0, EchelonTab.values.length - 1);
+
+  runApp(
+    EchelonApp(
+      appCache: appCache,
+      initialThemeMode: initialThemeMode,
+      initialColorSelection: ColorSelection.values[safeColorIndex],
+      initialTab: safeTab,
+      initialOrders: savedOrders,
+    ),
+  );
 }
 
 class CustomScrollBehavior extends MaterialScrollBehavior {
@@ -22,19 +46,42 @@ class CustomScrollBehavior extends MaterialScrollBehavior {
 }
 
 class EchelonApp extends StatefulWidget {
-  const EchelonApp({super.key});
+  const EchelonApp({
+    super.key,
+    required this.appCache,
+    required this.initialThemeMode,
+    required this.initialColorSelection,
+    required this.initialTab,
+    required this.initialOrders,
+  });
+
+  final AppCache appCache;
+  final ThemeMode initialThemeMode;
+  final ColorSelection initialColorSelection;
+  final int initialTab;
+  final List<Order> initialOrders;
 
   @override
   State<EchelonApp> createState() => _EchelonAppState();
 }
 
 class _EchelonAppState extends State<EchelonApp> {
-  ThemeMode themeMode = ThemeMode.light;
-  ColorSelection colorSelected = ColorSelection.graphite;
+  late ThemeMode themeMode;
+  late ColorSelection colorSelected;
+  late int lastSelectedTab;
+  late final OrderManager _orderManager;
 
   final YummyAuth _auth = YummyAuth();
   final CartManager _cartManager = CartManager();
-  final OrderManager _orderManager = OrderManager();
+
+  @override
+  void initState() {
+    super.initState();
+    themeMode = widget.initialThemeMode;
+    colorSelected = widget.initialColorSelection;
+    lastSelectedTab = widget.initialTab;
+    _orderManager = OrderManager(initialOrders: widget.initialOrders);
+  }
 
   Restaurant? _findVehicleById(String? id) {
     if (id == null) {
@@ -51,7 +98,7 @@ class _EchelonAppState extends State<EchelonApp> {
   }
 
   late final _router = GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/${widget.initialTab}',
     redirect: _appRedirect,
     routes: [
       GoRoute(
@@ -60,7 +107,7 @@ class _EchelonAppState extends State<EchelonApp> {
           onLogIn: (Credentials credentials) async {
             await _auth.signIn(credentials.username, credentials.password);
             if (!context.mounted) return;
-            context.go('/${EchelonTab.discover.value}');
+            context.go('/$lastSelectedTab');
           },
         ),
       ),
@@ -74,6 +121,7 @@ class _EchelonAppState extends State<EchelonApp> {
             changeTheme: changeThemeMode,
             changeColor: changeColor,
             colorSelected: colorSelected,
+            onTabSelected: updateLastTab,
             tab: int.tryParse(state.pathParameters['tab'] ?? '') ?? 0,
           );
         },
@@ -111,22 +159,37 @@ class _EchelonAppState extends State<EchelonApp> {
     if (!loggedIn) {
       return '/login';
     } else if (loggedIn && isOnLoginPage) {
-      return '/${EchelonTab.discover.value}';
+      return '/$lastSelectedTab';
     }
 
     return null;
   }
 
-  void changeThemeMode(bool useLightMode) {
+  Future<void> changeThemeMode(bool useLightMode) async {
     setState(() {
       themeMode = useLightMode ? ThemeMode.light : ThemeMode.dark;
     });
+    await widget.appCache.cacheThemeMode(useLightMode ? 'light' : 'dark');
   }
 
-  void changeColor(int value) {
+  Future<void> changeColor(int value) async {
+    if (value < 0 || value >= ColorSelection.values.length) {
+      return;
+    }
     setState(() {
       colorSelected = ColorSelection.values[value];
     });
+    await widget.appCache.cacheColorSelection(value);
+  }
+
+  Future<void> updateLastTab(int tab) async {
+    if (tab < 0 || tab >= EchelonTab.values.length) {
+      return;
+    }
+    setState(() {
+      lastSelectedTab = tab;
+    });
+    await widget.appCache.cacheLastTab(tab);
   }
 
   @override

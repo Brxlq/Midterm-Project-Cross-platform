@@ -10,6 +10,22 @@ class Post {
   String profileImageUrl;
   String comment;
   String timestamp;
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      json['id'] as String? ?? '',
+      json['profileImageUrl'] as String? ?? '',
+      json['comment'] as String? ?? '',
+      json['timestamp'] as String? ?? '0',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'profileImageUrl': profileImageUrl,
+        'comment': comment,
+        'timestamp': timestamp,
+      };
 }
 
 List<Post> posts = [
