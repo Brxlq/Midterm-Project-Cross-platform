@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../api/mock_yummy_service.dart';
 import '../components/components.dart';
 import '../constants.dart';
+import '../learn/recipes/recipe_search_history_stream.dart';
+import '../learn/vehicle/vehicle_discovery_manager.dart';
 import '../models/models.dart';
+import '../network/vehicle_catalog_service.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({
@@ -31,8 +35,10 @@ class _ExplorePageState extends State<ExplorePage>
 
   final mockService = MockYummyService();
   final SearchController _searchController = SearchController();
+  final TextEditingController _recipeQueryController = TextEditingController();
   late final Future<ExploreData> _exploreDataFuture;
   late final TabController _tabController;
+  late final VehicleDiscoveryManager _vehicleDiscoveryManager;
   String searchQuery = '';
   String quickFilter = 'all';
 
@@ -41,12 +47,19 @@ class _ExplorePageState extends State<ExplorePage>
     super.initState();
     _exploreDataFuture = mockService.getExploreData();
     _tabController = TabController(length: _categoryOrder.length, vsync: this);
+    _vehicleDiscoveryManager = VehicleDiscoveryManager(
+      service: VehicleCatalogService(),
+      historyStream: RecipeSearchHistoryStream(),
+    );
+    _vehicleDiscoveryManager.loadCatalog();
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _recipeQueryController.dispose();
     _tabController.dispose();
+    _vehicleDiscoveryManager.dispose();
     super.dispose();
   }
 
@@ -272,6 +285,11 @@ class _ExplorePageState extends State<ExplorePage>
               ),
               const SizedBox(height: 20),
               PostSection(posts: posts),
+              const SizedBox(height: 20),
+              _FleetFinderSection(
+                manager: _vehicleDiscoveryManager,
+                queryController: _recipeQueryController,
+              ),
             ],
           );
         }).toList(),
@@ -293,6 +311,197 @@ class _ExplorePageState extends State<ExplorePage>
 
         return _buildExploreBody(context, allRestaurants, posts);
       },
+    );
+  }
+}
+
+class _FleetFinderSection extends StatelessWidget {
+  const _FleetFinderSection({
+    required this.manager,
+    required this.queryController,
+  });
+
+  final VehicleDiscoveryManager manager;
+  final TextEditingController queryController;
+
+  Uri _sourceUriForMake(String makeName) {
+    return Uri.https(
+      'commons.wikimedia.org',
+      '/w/index.php',
+      {
+        'title': 'Special:MediaSearch',
+        'type': 'image',
+        'search': '$makeName car',
+      },
+    );
+  }
+
+  Future<void> _openSourceLink(String makeName) async {
+    final uri = _sourceUriForMake(makeName);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch source URL: $uri');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Theme.of(context).colorScheme.surfaceContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: AnimatedBuilder(
+          animation: manager,
+          builder: (context, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Fleet Finder Assistant',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Search live vehicle makes to plan future fleet additions '
+                  'and member requests.',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: queryController,
+                  textInputAction: TextInputAction.search,
+                  onSubmitted: manager.search,
+                  decoration: InputDecoration(
+                    hintText: 'Try: Tesla, Toyota, BMW',
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      tooltip: 'Search makes',
+                      onPressed: manager.isLoading
+                          ? null
+                          : () => manager.search(queryController.text),
+                      icon: const Icon(Icons.send),
+                    ),
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                StreamBuilder<List<String>>(
+                  stream: manager.recentQueries,
+                  initialData: manager.currentRecentQueries,
+                  builder: (context, snapshot) {
+                    final recent = snapshot.data ?? const <String>[];
+                    if (recent.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+                    return Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: recent
+                          .map(
+                            (query) => ActionChip(
+                              label: Text(query),
+                              onPressed: () {
+                                queryController.text = query;
+                                manager.search(query);
+                              },
+                            ),
+                          )
+                          .toList(),
+                    );
+                  },
+                ),
+                const SizedBox(height: 12),
+                if (manager.isLoading)
+                  const Center(child: CircularProgressIndicator())
+                else if (manager.error != null)
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.error_outline),
+                    title: Text(manager.error!.message),
+                    trailing: IconButton(
+                      tooltip: 'Retry',
+                      onPressed: manager.retry,
+                      icon: const Icon(Icons.refresh),
+                    ),
+                  )
+                else if (manager.makes.isEmpty)
+                  const Text('No matching makes. Try another vehicle brand.')
+                else
+                  SizedBox(
+                    height: 220,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: manager.makes.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 12),
+                      itemBuilder: (context, index) {
+                        final make = manager.makes[index];
+                        return SizedBox(
+                          width: 200,
+                          child: Card(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Text(
+                                    make.name,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    10,
+                                    0,
+                                    10,
+                                    10,
+                                  ),
+                                  child: Text(
+                                    'Catalog ID: ${make.id}',
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    10,
+                                    0,
+                                    10,
+                                    10,
+                                  ),
+                                  child: InkWell(
+                                    onTap: () => _openSourceLink(make.name),
+                                    child: Text(
+                                      'Open source link',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 }
