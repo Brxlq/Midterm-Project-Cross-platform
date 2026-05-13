@@ -16,6 +16,9 @@ class AccountPage extends StatefulWidget {
   final LogoutCallback onLogOut;
   final VoidCallback onOpenSupportChat;
 
+  static const supportTileKey = Key('account_support_tile');
+  static const logoutTileKey = Key('account_logout_tile');
+
   @override
   AccountPageState createState() => AccountPageState();
 }
@@ -84,12 +87,14 @@ class AccountPageState extends State<AccountPage> {
           subtitle: Text('Manage payment methods and trip credits'),
         ),
         ListTile(
+          key: AccountPage.supportTileKey,
           leading: const Icon(Icons.support_agent),
           title: const Text('Support'),
           subtitle: const Text('Roadside help, damage reporting, and FAQs'),
           onTap: widget.onOpenSupportChat,
         ),
         ListTile(
+          key: AccountPage.logoutTileKey,
           leading: const Icon(Icons.logout),
           title: const Text('Log out'),
           onTap: () {

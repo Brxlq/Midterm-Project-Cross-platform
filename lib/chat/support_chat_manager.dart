@@ -13,7 +13,9 @@ class SupportChatManager extends ChangeNotifier {
 
   bool get sending => _sending;
   String? get error => _error;
-  Stream<List<SupportChatMessage>> get messageStream => _repository.watchMessages();
+  Stream<List<SupportChatMessage>> get messageStream {
+    return _repository.watchMessages();
+  }
 
   Future<void> send(String text) async {
     _sending = true;

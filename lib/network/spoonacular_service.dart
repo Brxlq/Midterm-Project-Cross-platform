@@ -50,7 +50,8 @@ class SpoonacularService implements RecipeServiceInterface {
       'number': request.number.toString(),
       if (request.cuisine != null && request.cuisine!.isNotEmpty)
         'cuisine': request.cuisine!,
-      if (request.diet != null && request.diet!.isNotEmpty) 'diet': request.diet!,
+      if (request.diet != null && request.diet!.isNotEmpty)
+        'diet': request.diet!,
       if (request.addRecipeInformation) 'addRecipeInformation': 'true',
     });
 
@@ -116,4 +117,3 @@ class SpoonacularService implements RecipeServiceInterface {
     }
   }
 }
-

@@ -14,7 +14,11 @@ class FleetNotesRepository {
     required String vehicleName,
     required String note,
   }) {
-    return _db.addNote(vehicleId: vehicleId, vehicleName: vehicleName, note: note);
+    return _db.addNote(
+      vehicleId: vehicleId,
+      vehicleName: vehicleName,
+      note: note,
+    );
   }
 
   Future<void> deleteNote(int id) => _db.deleteNote(id);

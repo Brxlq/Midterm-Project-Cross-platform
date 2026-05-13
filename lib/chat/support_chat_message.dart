@@ -22,7 +22,7 @@ class SupportChatMessage {
 
   factory SupportChatMessage.fromJson(Map<String, dynamic> json) {
     final created = json['createdAt'];
-    DateTime createdAt = DateTime.now();
+    var createdAt = DateTime.now();
     if (created is Timestamp) {
       createdAt = created.toDate();
     } else if (created is String) {

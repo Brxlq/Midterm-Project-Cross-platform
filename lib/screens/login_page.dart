@@ -76,7 +76,7 @@ class LoginPage extends StatelessWidget {
                             ),
                           ],
                         ),
-              ),
+                      ),
               ),
             ),
           ),
@@ -265,6 +265,13 @@ class LoginForm extends StatefulWidget {
     super.key,
   });
 
+  static const emailFieldKey = Key('login_email_field');
+  static const passwordFieldKey = Key('login_password_field');
+  static const signInButtonKey = Key('login_sign_in_button');
+  static const createAccountButtonKey = Key('login_create_account_button');
+  static const loadingIndicatorKey = Key('login_loading_indicator');
+  static const messagePanelKey = Key('login_message_panel');
+
   final Future<void> Function(Credentials credentials) onLogIn;
   final Future<void> Function(Credentials credentials) onSignUp;
 
@@ -312,10 +319,11 @@ class _LoginFormState extends State<LoginForm> {
         _errorMessage = e.toString().replaceFirst('Exception: ', '');
       });
     } finally {
-      if (!mounted) return;
-      setState(() {
-        _submitting = false;
-      });
+      if (mounted) {
+        setState(() {
+          _submitting = false;
+        });
+      }
     }
   }
 
@@ -352,12 +360,14 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Use your real account credentials to sign in, or create a new '
+                    'Use your real account credentials to sign in, or create '
+                    'a new '
                     'account from this screen.',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 24),
                   TextField(
+                    key: LoginForm.emailFieldKey,
                     controller: _usernameController,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
@@ -370,6 +380,7 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   const SizedBox(height: 14),
                   TextField(
+                    key: LoginForm.passwordFieldKey,
                     controller: _passwordController,
                     obscureText: true,
                     onSubmitted: (_) => _submitLogin(),
@@ -385,6 +396,7 @@ class _LoginFormState extends State<LoginForm> {
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton(
+                      key: LoginForm.signInButtonKey,
                       onPressed: _submitting ? null : _submitLogin,
                       style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 18),
@@ -394,6 +406,7 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                       child: _submitting
                           ? const SizedBox(
+                              key: LoginForm.loadingIndicatorKey,
                               width: 18,
                               height: 18,
                               child: CircularProgressIndicator(strokeWidth: 2),
@@ -405,12 +418,14 @@ class _LoginFormState extends State<LoginForm> {
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton(
+                      key: LoginForm.createAccountButtonKey,
                       onPressed: _submitting ? null : _submitSignUp,
                       child: const Text('Create Account'),
                     ),
                   ),
                   const SizedBox(height: 18),
                   Container(
+                    key: LoginForm.messagePanelKey,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),

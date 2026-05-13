@@ -6,7 +6,11 @@ void main() {
   test('fleet notes CRUD works with drift local database', () async {
     final db = FleetNotesDatabase(NativeDatabase.memory());
 
-    await db.addNote(vehicleId: 'v1', vehicleName: 'Tesla Model 3', note: 'Fast pickup');
+    await db.addNote(
+      vehicleId: 'v1',
+      vehicleName: 'Tesla Model 3',
+      note: 'Fast pickup',
+    );
     var notes = await db.fetchRecentNotes();
     expect(notes.length, 1);
     expect(notes.first.note, 'Fast pickup');
