@@ -6,7 +6,8 @@ import 'package:yummy/models/restaurant.dart';
 void main() {
   group('JSON serialization', () {
     test('FoodCategory fromJson/toJson roundtrip', () {
-      final original = FoodCategory('Economy', 5, 'https://example.com/car.jpg');
+      final original =
+          FoodCategory('Economy', 5, 'https://example.com/car.jpg');
       final encoded = original.toJson();
       final decoded = FoodCategory.fromJson(encoded);
 

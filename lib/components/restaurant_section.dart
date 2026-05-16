@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constants.dart';
+import '../favourites/favourites.dart';
 import '../models/models.dart';
 import 'components.dart';
 
@@ -12,12 +13,14 @@ class RestaurantSection extends StatelessWidget {
     required this.cartManager,
     required this.orderManager,
     required this.selectedCategory,
+    required this.favouriteManager,
   });
 
   final List<Restaurant> restaurants;
   final CartManager cartManager;
   final OrderManager orderManager;
   final String selectedCategory;
+  final FavouriteVehicleManager favouriteManager;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +89,14 @@ class RestaurantSection extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 12),
                       child: RestaurantLandscapeCard(
                         restaurant: restaurants[index],
+                        isFavourite: favouriteManager.isFavourite(
+                          restaurants[index].id,
+                        ),
+                        onFavouriteToggle: () async {
+                          await favouriteManager.toggleFavourite(
+                            restaurants[index],
+                          );
+                        },
                         onTap: () {
                           context.go(
                             '/${EchelonTab.discover.value}/vehicle/${restaurants[index].id}',

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'firebase_options.dart';
+import 'favourites/favourites.dart';
 import '../models/models.dart';
 import '../screens/screens.dart';
 import 'constants.dart';
@@ -20,9 +21,8 @@ Future<void> main() async {
   final cachedTab = await appCache.getLastTab();
   final savedOrders = await OrderManager.loadSavedOrders();
 
-  final initialThemeMode = cachedThemeMode == 'dark'
-      ? ThemeMode.dark
-      : ThemeMode.light;
+  final initialThemeMode =
+      cachedThemeMode == 'dark' ? ThemeMode.dark : ThemeMode.light;
   final safeColorIndex = cachedColorSelection.clamp(
     0,
     ColorSelection.values.length - 1,
@@ -84,6 +84,7 @@ class _EchelonAppState extends State<EchelonApp> {
   late ColorSelection colorSelected;
   late int lastSelectedTab;
   late final OrderManager _orderManager;
+  late final FavouriteVehicleManager _favouriteManager;
 
   final YummyAuth _auth = YummyAuth();
   final CartManager _cartManager = CartManager();
@@ -95,6 +96,15 @@ class _EchelonAppState extends State<EchelonApp> {
     colorSelected = widget.initialColorSelection;
     lastSelectedTab = widget.initialTab;
     _orderManager = OrderManager(initialOrders: widget.initialOrders);
+    _favouriteManager = FavouriteVehicleManager(_createFavouriteRepository());
+  }
+
+  FavouriteVehicleRepository _createFavouriteRepository() {
+    try {
+      return FirestoreFavouriteVehicleRepository();
+    } catch (_) {
+      return InMemoryFavouriteVehicleRepository();
+    }
   }
 
   Restaurant? _findVehicleById(String? id) {
@@ -145,6 +155,7 @@ class _EchelonAppState extends State<EchelonApp> {
             auth: _auth,
             cartManager: _cartManager,
             ordersManager: _orderManager,
+            favouriteManager: _favouriteManager,
             changeTheme: changeThemeMode,
             changeColor: changeColor,
             colorSelected: colorSelected,
@@ -257,6 +268,12 @@ class _EchelonAppState extends State<EchelonApp> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _favouriteManager.dispose();
+    super.dispose();
   }
 }
 

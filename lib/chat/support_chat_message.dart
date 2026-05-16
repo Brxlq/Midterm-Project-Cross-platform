@@ -14,11 +14,11 @@ class SupportChatMessage {
   final DateTime createdAt;
 
   Map<String, dynamic> toJson() => {
-    'senderId': senderId,
-    'senderLabel': senderLabel,
-    'text': text,
-    'createdAt': Timestamp.fromDate(createdAt),
-  };
+        'senderId': senderId,
+        'senderLabel': senderLabel,
+        'text': text,
+        'createdAt': Timestamp.fromDate(createdAt),
+      };
 
   factory SupportChatMessage.fromJson(Map<String, dynamic> json) {
     final created = json['createdAt'];

@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../api/mock_yummy_service.dart';
 import '../components/components.dart';
 import '../constants.dart';
+import '../favourites/favourites.dart';
 import '../learn/recipes/recipe_search_history_stream.dart';
 import '../learn/vehicle/vehicle_discovery_manager.dart';
 import '../models/models.dart';
@@ -15,10 +16,12 @@ class ExplorePage extends StatefulWidget {
     super.key,
     required this.cartManager,
     required this.orderManager,
+    required this.favouriteManager,
   });
 
   final CartManager cartManager;
   final OrderManager orderManager;
+  final FavouriteVehicleManager favouriteManager;
 
   @override
   State<ExplorePage> createState() => _ExplorePageState();
@@ -282,6 +285,7 @@ class _ExplorePageState extends State<ExplorePage>
                 cartManager: widget.cartManager,
                 orderManager: widget.orderManager,
                 selectedCategory: category,
+                favouriteManager: widget.favouriteManager,
               ),
               const SizedBox(height: 20),
               PostSection(posts: posts),

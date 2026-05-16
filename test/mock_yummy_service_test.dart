@@ -9,8 +9,8 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   const assetsChannel = 'flutter/assets';
-  final messenger = TestDefaultBinaryMessengerBinding
-      .instance.defaultBinaryMessenger;
+  final messenger =
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
 
   ByteData stringData(String value) {
     final bytes = Uint8List.fromList(utf8.encode(value));

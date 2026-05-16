@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../components/components.dart';
+import '../favourites/favourites.dart';
 import '../models/models.dart';
 import '../screens/screens.dart';
 import 'constants.dart';
@@ -12,6 +13,7 @@ class Home extends StatefulWidget {
     required this.auth,
     required this.cartManager,
     required this.ordersManager,
+    required this.favouriteManager,
     required this.changeTheme,
     required this.changeColor,
     required this.colorSelected,
@@ -23,6 +25,7 @@ class Home extends StatefulWidget {
   final int tab;
   final CartManager cartManager;
   final OrderManager ordersManager;
+  final FavouriteVehicleManager favouriteManager;
   final ColorSelection colorSelected;
   final Future<void> Function(bool useLightMode) changeTheme;
   final Future<void> Function(int value) changeColor;
@@ -52,11 +55,40 @@ class _HomeState extends State<Home> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    widget.favouriteManager.addListener(_handleFavouriteUpdate);
+    widget.favouriteManager.start();
+  }
+
+  @override
+  void didUpdateWidget(covariant Home oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.favouriteManager != widget.favouriteManager) {
+      oldWidget.favouriteManager.removeListener(_handleFavouriteUpdate);
+      widget.favouriteManager.addListener(_handleFavouriteUpdate);
+    }
+  }
+
+  void _handleFavouriteUpdate() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.favouriteManager.removeListener(_handleFavouriteUpdate);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final pages = [
       ExplorePage(
         cartManager: widget.cartManager,
         orderManager: widget.ordersManager,
+        favouriteManager: widget.favouriteManager,
       ),
       MyOrdersPage(orderManager: widget.ordersManager),
       AccountPage(
@@ -68,6 +100,11 @@ class _HomeState extends State<Home> {
         onOpenSupportChat: () {
           context.go('/${widget.tab}/support-chat');
         },
+        onOpenFavouriteVehicle: (vehicleId) {
+          context.go('/${EchelonTab.discover.value}/vehicle/$vehicleId');
+        },
+        favouriteVehicles: widget.favouriteManager.favourites,
+        favouriteError: widget.favouriteManager.error,
         user: User(
           firstName: 'Yerkebulan',
           lastName: 'Sovet',

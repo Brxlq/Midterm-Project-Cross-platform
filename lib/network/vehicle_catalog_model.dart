@@ -9,13 +9,8 @@ class VehicleMake {
 
   factory VehicleMake.fromJson(Map<String, dynamic> json) {
     final idValue =
-        json['id'] ??
-        json['makeId'] ??
-        json['Make_ID'] ??
-        json['make_id'] ??
-        0;
-    final nameValue =
-        json['name'] ??
+        json['id'] ?? json['makeId'] ?? json['Make_ID'] ?? json['make_id'] ?? 0;
+    final nameValue = json['name'] ??
         json['make'] ??
         json['makeName'] ??
         json['Make_Name'] ??
@@ -24,9 +19,7 @@ class VehicleMake {
     final resolvedName = (nameValue as String? ?? '').trim();
     final numericId = (idValue as num?)?.toInt();
     final resolvedId =
-        numericId ??
-        int.tryParse('$idValue') ??
-        resolvedName.hashCode.abs();
+        numericId ?? int.tryParse('$idValue') ?? resolvedName.hashCode.abs();
 
     return VehicleMake(
       id: resolvedId,
@@ -54,8 +47,7 @@ class VehicleCatalogResponse {
 
     return VehicleCatalogResponse(
       results: parsed,
-      totalResults:
-          (json['Count'] as num?)?.toInt() ??
+      totalResults: (json['Count'] as num?)?.toInt() ??
           (json['totalResults'] as num?)?.toInt() ??
           parsed.length,
     );
@@ -63,10 +55,7 @@ class VehicleCatalogResponse {
 
   static List<dynamic> _extractResults(Map<String, dynamic> json) {
     final direct =
-        json['Results'] ??
-        json['results'] ??
-        json['data'] ??
-        json['Makes'];
+        json['Results'] ?? json['results'] ?? json['data'] ?? json['Makes'];
     if (direct is List<dynamic>) {
       return direct;
     }

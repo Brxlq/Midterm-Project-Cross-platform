@@ -72,8 +72,7 @@ class VehicleCatalogService {
         return QueryResult.failure(
           QueryError(
             type: QueryErrorType.server,
-            message:
-                'CarQuery failed and fallback request failed '
+            message: 'CarQuery failed and fallback request failed '
                 '(${response.statusCode}).',
             statusCode: response.statusCode,
           ),

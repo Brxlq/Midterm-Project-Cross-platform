@@ -24,6 +24,7 @@ void main() {
           onOpenSupportChat: () {
             openedSupport = true;
           },
+          onOpenFavouriteVehicle: (_) {},
           onLogOut: (didLogout) {
             loggedOut = didLogout;
           },
@@ -35,11 +36,16 @@ void main() {
     expect(find.text('Echelon Member'), findsOneWidget);
     expect(find.text('2400 member points'), findsOneWidget);
     expect(find.text('Echelon Plus'), findsOneWidget);
+    expect(find.text('No favourite vehicles yet.'), findsOneWidget);
 
+    await tester.drag(find.byType(ListView), const Offset(0, -320));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(AccountPage.supportTileKey));
     await tester.pump();
     expect(openedSupport, isTrue);
 
+    await tester.drag(find.byType(ListView), const Offset(0, -120));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(AccountPage.logoutTileKey));
     await tester.pump();
     expect(loggedOut, isTrue);

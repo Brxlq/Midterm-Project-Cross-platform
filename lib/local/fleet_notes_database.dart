@@ -32,16 +32,19 @@ class FleetNotesDatabase extends _$FleetNotesDatabase {
   Future<List<FleetNote>> fetchRecentNotes() async {
     final rows = await (select(
       fleetNotes,
-    )..orderBy([(t) => OrderingTerm.desc(t.createdAt)])).get();
+    )..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+        .get();
     return rows;
   }
 
   Stream<List<FleetNote>> watchRecentNotes() {
     return (select(
       fleetNotes,
-    )..orderBy([(t) => OrderingTerm.desc(t.createdAt)])).watch().map(
-      (rows) => rows,
-    );
+    )..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+        .watch()
+        .map(
+          (rows) => rows,
+        );
   }
 
   Future<void> addNote({

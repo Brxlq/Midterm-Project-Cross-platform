@@ -109,16 +109,14 @@ List<Item> economyAddOns() {
       description:
           'Magnetic dash mount with Lightning and USB-C charging cables.',
       price: 8,
-      imageUrl:
-          'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9'
+      imageUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9'
           '?auto=format&fit=crop&w=900&q=80',
     ),
     Item(
       name: 'Street parking protection',
       description: 'Reduced excess for mirrors, scrapes, and wheel damage.',
       price: 14,
-      imageUrl:
-          'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d'
+      imageUrl: 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d'
           '?auto=format&fit=crop&w=900&q=80',
     ),
   ];
@@ -128,12 +126,10 @@ List<Item> comfortAddOns() {
   return [
     Item(
       name: 'Extra driver access',
-      description:
-          'Add a second approved driver for city handoffs '
+      description: 'Add a second approved driver for city handoffs '
           'or longer day trips.',
       price: 18,
-      imageUrl:
-          'https://images.unsplash.com/photo-1503376780353-7e6692767b70'
+      imageUrl: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70'
           '?auto=format&fit=crop&w=900&q=80',
     ),
     Item(
@@ -141,8 +137,7 @@ List<Item> comfortAddOns() {
       description:
           'Upgrade your booking with unlimited mileage in the local zone.',
       price: 20,
-      imageUrl:
-          'https://images.unsplash.com/photo-1485291571150-772bcfc10da5'
+      imageUrl: 'https://images.unsplash.com/photo-1485291571150-772bcfc10da5'
           '?auto=format&fit=crop&w=900&q=80',
     ),
   ];
@@ -155,18 +150,15 @@ List<Item> premiumAddOns() {
       description:
           'Fresh wash, cabin fragrance reset, and premium curb presentation.',
       price: 26,
-      imageUrl:
-          'https://images.unsplash.com/photo-1607861716497-e65ab29fc7ac'
+      imageUrl: 'https://images.unsplash.com/photo-1607861716497-e65ab29fc7ac'
           '?auto=format&fit=crop&w=900&q=80',
     ),
     Item(
       name: 'Valet return',
-      description:
-          'End your trip in the core service zone without '
+      description: 'End your trip in the core service zone without '
           'returning to the hub.',
       price: 30,
-      imageUrl:
-          'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d'
+      imageUrl: 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d'
           '?auto=format&fit=crop&w=900&q=80',
     ),
   ];
@@ -179,16 +171,14 @@ List<Item> electricAddOns() {
       description:
           'Prepaid fast-charging credit for quick top-ups during the trip.',
       price: 12,
-      imageUrl:
-          'https://images.unsplash.com/photo-1593941707882-a5bac6861d75'
+      imageUrl: 'https://images.unsplash.com/photo-1593941707882-a5bac6861d75'
           '?auto=format&fit=crop&w=900&q=80',
     ),
     Item(
       name: 'Airport lane pass',
       description: 'Priority pickup and drop-off access for major terminals.',
       price: 24,
-      imageUrl:
-          'https://images.unsplash.com/photo-1436491865332-7a61a109cc05'
+      imageUrl: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05'
           '?auto=format&fit=crop&w=900&q=80',
     ),
   ];

@@ -7,10 +7,14 @@ class RestaurantLandscapeCard extends StatefulWidget {
     super.key,
     required this.restaurant,
     required this.onTap,
+    this.isFavourite = false,
+    this.onFavouriteToggle,
   });
 
   final Restaurant restaurant;
   final Function() onTap;
+  final bool isFavourite;
+  final Future<void> Function()? onFavouriteToggle;
 
   @override
   State<RestaurantLandscapeCard> createState() =>
@@ -18,8 +22,6 @@ class RestaurantLandscapeCard extends StatefulWidget {
 }
 
 class _RestaurantLandscapeCardState extends State<RestaurantLandscapeCard> {
-  bool _isFavorited = false;
-
   String get _heroTag => 'vehicle-image-${widget.restaurant.id}';
 
   @override
@@ -44,6 +46,16 @@ class _RestaurantLandscapeCardState extends State<RestaurantLandscapeCard> {
                     child: Image.network(
                       widget.restaurant.imageUrl,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return ColoredBox(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.surfaceContainerHighest,
+                          child: const Center(
+                            child: Icon(Icons.directions_car, size: 48),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const DecoratedBox(
@@ -62,15 +74,17 @@ class _RestaurantLandscapeCardState extends State<RestaurantLandscapeCard> {
                       backgroundColor: Colors.white.withValues(alpha: 0.92),
                       child: IconButton(
                         icon: Icon(
-                          _isFavorited ? Icons.favorite : Icons.favorite_border,
+                          widget.isFavourite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
                         ),
                         iconSize: 20,
                         color: Colors.red[400],
-                        onPressed: () {
-                          setState(() {
-                            _isFavorited = !_isFavorited;
-                          });
-                        },
+                        onPressed: widget.onFavouriteToggle == null
+                            ? null
+                            : () {
+                                widget.onFavouriteToggle!();
+                              },
                       ),
                     ),
                   ),

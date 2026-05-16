@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../favourites/favourites.dart';
 import '../models/models.dart';
 
 typedef LogoutCallback = void Function(bool didLogout);
@@ -9,15 +10,22 @@ class AccountPage extends StatefulWidget {
     super.key,
     required this.onLogOut,
     required this.onOpenSupportChat,
+    required this.onOpenFavouriteVehicle,
+    this.favouriteVehicles = const [],
+    this.favouriteError,
     required this.user,
   });
 
   final User user;
   final LogoutCallback onLogOut;
   final VoidCallback onOpenSupportChat;
+  final ValueChanged<String> onOpenFavouriteVehicle;
+  final List<FavouriteVehicle> favouriteVehicles;
+  final String? favouriteError;
 
   static const supportTileKey = Key('account_support_tile');
   static const logoutTileKey = Key('account_logout_tile');
+  static const favouritesSectionKey = Key('account_favourites_section');
 
   @override
   AccountPageState createState() => AccountPageState();
@@ -40,6 +48,8 @@ class AccountPageState extends State<AccountPage> {
           buildProfile(),
           const SizedBox(height: 20),
           buildMembershipCard(),
+          const SizedBox(height: 20),
+          buildFavouritesSection(),
           const SizedBox(height: 20),
           buildMenu(),
         ],
@@ -102,6 +112,72 @@ class AccountPageState extends State<AccountPage> {
           },
         ),
       ],
+    );
+  }
+
+  Widget buildFavouritesSection() {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Card(
+      key: AccountPage.favouritesSectionKey,
+      color: colorScheme.surfaceContainerLow,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Favourite vehicles',
+              style: textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 8),
+            if (widget.favouriteError != null)
+              Text(
+                widget.favouriteError!,
+                style: TextStyle(color: colorScheme.error),
+              )
+            else if (widget.favouriteVehicles.isEmpty)
+              const Text('No favourite vehicles yet.')
+            else
+              ...widget.favouriteVehicles.map(
+                (vehicle) => ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      vehicle.vehicleImageUrl,
+                      width: 56,
+                      height: 56,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return ColoredBox(
+                          color: colorScheme.surfaceContainerHighest,
+                          child: const SizedBox(
+                            width: 56,
+                            height: 56,
+                            child: Icon(Icons.directions_car),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  title: Text(vehicle.vehicleName),
+                  subtitle: Text(
+                    '${vehicle.vehicleClass} | '
+                    '\$${vehicle.hourlyRate.toStringAsFixed(0)}/hr',
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    widget.onOpenFavouriteVehicle(vehicle.vehicleId);
+                  },
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 

@@ -134,9 +134,8 @@ class Order {
             minute: (selectedTimeJson['minute'] as int?) ?? 0,
           );
     final selectedDateRaw = json['selectedDate'] as String?;
-    final selectedDate = selectedDateRaw == null
-        ? null
-        : DateTime.tryParse(selectedDateRaw);
+    final selectedDate =
+        selectedDateRaw == null ? null : DateTime.tryParse(selectedDateRaw);
     final items = (json['items'] as List<dynamic>? ?? [])
         .whereType<Map>()
         .map((item) => CartItem.fromJson(Map<String, dynamic>.from(item)))
